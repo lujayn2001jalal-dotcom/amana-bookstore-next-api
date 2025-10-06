@@ -1,25 +1,25 @@
 import fs from "fs";
 import path from "path";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 const booksPath = path.join(process.cwd(), "app", "data", "books.json");
 
-export async function GET(
-  request: Request,
-  context: { params: { id: string } }
-) {
+// ✅ GET single book by ID
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // ✅ Read JSON file
+    // Read JSON file
     const rawData = fs.readFileSync(booksPath, "utf-8");
     const data = JSON.parse(rawData);
-    const books = Array.isArray(data) ? data : data.books;
+    const books: {
+      id: string;
+      title: string;
+      author: string;
+      [key: string]: any;
+    }[] = Array.isArray(data) ? data : data.books;
 
-    // ✅ Find the book (using Number comparison for safety)
-    const book = books.find(
-      (b: { id: string | number }) => Number(b.id) === Number(context.params.id)
-    );
+    // Find the book
+    const book = books.find((b) => Number(b.id) === Number(params.id));
 
-    // ✅ Handle not found
     if (!book) {
       return NextResponse.json(
         { success: false, message: "Book not found" },
@@ -27,7 +27,6 @@ export async function GET(
       );
     }
 
-    // ✅ Return found book
     return NextResponse.json({ success: true, data: book });
   } catch (error) {
     console.error("Error reading books:", error);

@@ -109,6 +109,16 @@
       "comment": "Great integration of geophysics with climate science. The plate tectonics chapters are well-written and current.",
       "timestamp": "2024-03-08T11:40:00Z",
       "verified": true
+    },
+    {
+      "id": "review-12",
+      "bookId": "1",
+      "author": "Lujain Abdalrazaq",
+      "title": "Great Intro to Mechanics",
+      "comment": "This book explains classical mechanics in a very clear way. Highly recommended for beginners!",
+      "rating": 5,
+      "verified": true,
+      "timestamp": "2025-10-06T18:35:42.926Z"
     }
   ]
 }

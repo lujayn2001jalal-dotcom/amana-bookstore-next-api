@@ -10,10 +10,14 @@ export async function GET(req: NextRequest) {
   try {
     // Extract book ID from URL
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop(); // gets [id] from /api/books/[id]/reviews
+    const segments = url.pathname.split("/").filter(Boolean); // ["api","books","1","reviews"]
+    const id = segments[segments.length - 2]; // correct segment for book ID
 
     if (!id) {
-      return NextResponse.json({ success: false, message: "Book ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "Book ID is required" },
+        { status: 400 }
+      );
     }
 
     // Read books
@@ -25,7 +29,10 @@ export async function GET(req: NextRequest) {
 
     const book = books.find((b) => Number(b.id) === Number(id));
     if (!book) {
-      return NextResponse.json({ success: false, message: "Book not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Book not found" },
+        { status: 404 }
+      );
     }
 
     // Read reviews
@@ -40,6 +47,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: bookReviews });
   } catch (error) {
     console.error("Error reading reviews:", error);
-    return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
